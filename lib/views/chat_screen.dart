@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../view_model/chat_provider.dart';
 import '../model/chat_message.dart';
+import '../view_model/chat_message_provider.dart'; // ✅ actual filename
+
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -17,7 +19,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isNotEmpty) {
-      ref.read(chatProvider.notifier).sendMessage(text);
+      ref.read(chatMessageProviderProvider.notifier).sendMessage(text);
       _controller.clear();
     }
   }
@@ -30,7 +32,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final messages = ref.watch(chatProvider);
+    // final messages = ref.watch(chatProvider);
+    final messagesList = ref.watch(chatMessageProviderProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,9 +47,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                itemCount: messages.length,
+                itemCount: messagesList.length,
                 itemBuilder: (context, index) {
-                  final msg = messages[index];
+                  final msg = messagesList[index];
                   final isUser = msg.sender == Sender.user;
 
                   return Align(

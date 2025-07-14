@@ -1,19 +1,18 @@
-//== lib/view_models/chat_provider.dart ==
 import 'dart:convert';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:http/http.dart' as http;
-import '../model/chat_message.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final chatProvider = StateNotifierProvider<ChatViewModel, List<ChatMessage>>(
-      (ref) => ChatViewModel(),
-);
+import 'package:gemini_bot/model/chat_message.dart';
 
-class ChatViewModel extends StateNotifier<List<ChatMessage>> {
-  ChatViewModel() : super([]);
+part 'chat_message_provider.g.dart';
 
-  final String apiUrl = "https://gemini-bot-u61c.onrender.com/generate"; // Replace with your deployed Render URL
-
-  Future<void> sendMessage(String userText) async {
+@riverpod
+class ChatMessageProvider extends _$ChatMessageProvider{
+  @override
+  List<ChatMessage> build()=>[];
+    final String apiUrl = "https://gemini-bot-u61c.onrender.com/generate";
+     Future<void> sendMessage(String userText) async {
     if (userText.trim().isEmpty) return;
 
     state = [...state, ChatMessage(sender: Sender.user, text: userText)];
